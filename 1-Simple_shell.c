@@ -1,4 +1,6 @@
 #include "shell.h"
+#define BUFFER_SIZE 1024
+
 /**
 *main - write a command line interpreter
 *
@@ -7,36 +9,60 @@
 int main(void)
 {
 	char *mem;
-	size_t memsize = 64;
+	size_t memsize = BUFFER_SIZE;
 	pid_t pid;
-	int i;
-	char *argv[2];
-	char *envp[2];
+	unsigned int i;
 	char c = '$';
+	ssize_t n;
 
 	mem = malloc(memsize * sizeof(char));
-	_putchar(c);
-	getline(&mem, &memsize, stdin);
-	for (i = 0; i < *mem; i++)
+	if (mem == NULL)
 	{
-	_putchar(*mem);
-	_putchar('\n');
+	perror("failed");
+	return (1);
 	}
+	_putchar(c);
+	n = getline(&mem, &memsize, stdin);
+	for (i = 0; i < memsize; i++)
+	{
+	_putchar(mem[i]);
+	}
+	_putchar('\n');
+	if (n == -1)
+	{
+	perror("failed");
+	free(mem);
+	return (-1);
+	}
+	if (mem[n - 1] == '\n')
+		mem[n - 1] = '\0';
 	pid = fork();
 	if (pid == -1)
 	{
 	perror("it's failed");
+	free(mem);
 	return (1);
 	}
 	else if (pid == 0)
 	{
-	execve(argv[0], argv, envp);
-	}
-	else if (execve(argv[0], argv, envp) == -1)
+	char **argv = malloc(2 * sizeof(char *));
+
+	if (argv == NULL)
 	{
 	perror("failed");
+	return (1);
 	}
+	argv[0] = mem;
+	argv[1] = NULL;
+	if (execve(mem, argv, environ) == -1)
+	{
+	perror("failed");
+	return (1);
+	}
+	else
+	{
 	wait(NULL);
-	free(mem);
+	}
+	}
 	return (0);
 }
