@@ -12,7 +12,7 @@ void prom(char **av, char **env)
 	pid_t pid;
 	char c = '$';
 	ssize_t mem;
-	int status, x = 0;
+	char e = 'F';
 
 	(void) **av;
 	while (1)
@@ -24,11 +24,9 @@ void prom(char **av, char **env)
 	free(buff);
 	exit(EXIT_FAILURE);
 	}
-	while (buff[x])
+	if (buff[mem - 1] == '\n')
 	{
-	if (buff[x] == '\n')
-		buff[x] = 0;
-	x++;
+	buff[mem - 1] = '\0';
 	}
 	argv[0] = buff;
 	pid = fork();
@@ -40,10 +38,11 @@ void prom(char **av, char **env)
 	if (pid == 0)
 	{
 	if (execve(argv[0], argv, env) == -1)
-		perror("failed");
+		_putchar(e);
+	_putchar('\n');
 	}
 	else
-		wait(&status);
+		wait(NULL);
 	}
 }
 
