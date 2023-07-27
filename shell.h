@@ -8,5 +8,7 @@ extern char **environ;
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+int main(int ac, char **av, char **env);
 int _putchar(char c);
+void prom(char **av, char**env);
 #endif

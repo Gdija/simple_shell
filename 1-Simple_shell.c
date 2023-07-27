@@ -5,7 +5,7 @@
 *main - write a command line interpreter
 *
 *Return: always 0
-*/
+
 int main(void)
 {
 	char *mem;
@@ -66,3 +66,5 @@ int main(void)
 	}
 	return (0);
 }
+*/
+
