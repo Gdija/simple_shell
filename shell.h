@@ -12,6 +12,8 @@
 extern char **environ;
 int _putchar(char c);
 void prom(char **av, char **env);
+void handle_prom_arg();
+void env_prom(void);
 
 
 
